@@ -6,6 +6,7 @@ import {
   getNode,
   getNodes,
   insertLast,
+  memo,
 } from './lib/index.js';
 
 // [phase-1] 주사위 굴리기
@@ -37,7 +38,7 @@ const [startButton, recordButton, resetButton] = getNodes(
   '.buttonGroup > button'
 );
 const recordListWrapper = getNode('.recordListWrapper');
-const tbody = getNode('.recordList tbody');
+memo('@tbody', () => getNode('.recordList tbody')); // setter
 
 // 진짜 진짜 쉬운 과제
 
@@ -67,7 +68,7 @@ function renderRecordItem() {
   // 큐브의 data-dice 값 가져오기
   const diceValue = +attr('#cube', 'data-dice');
 
-  insertLast(tbody, createItem(diceValue));
+  insertLast(memo('@tbody'), createItem(diceValue));
 
   endScroll(recordListWrapper);
 }
@@ -107,7 +108,7 @@ function handleReset() {
   recordButton.disabled = true;
   resetButton.disabled = true;
 
-  clearContents(tbody);
+  clearContents(memo('@tbody'));
 
   count = 0;
   total = 0;
